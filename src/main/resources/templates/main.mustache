@@ -1,7 +1,27 @@
 <html>
-    <body>
-        <div>
-            {{some}}
-        </div>
-    </body>
+
+<body>
+<div>
+    <!-- Форма ввода сообщений через пост-запрос -->
+    <form method="post">
+        <input type="text" name="text" placeholder="Введите сообщение" />
+        <input type="text" name="tag" placeholder="Тэг">
+        <button type="submit">Добавить</button>
+    </form>
+</div>
+<!-- Еще одна форма -->
+<div>Список сообщений</div>
+<form method="post" action="filter">
+    <input type="text" name="filter">
+    <button type="submit">Найти</button>
+</form>
+<!-- отображение списка -->
+{{#messages}}
+<div>
+    <b>{{id}}</b>
+    <span>{{text}}</span>
+    <i>{{tag}}</i>
+</div>
+{{/messages}}
+</body>
 </html>
