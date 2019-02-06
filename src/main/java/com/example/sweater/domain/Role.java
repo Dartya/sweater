@@ -1,5 +1,12 @@
 package com.example.sweater.domain;
 
-public enum Role { //перечисление, связано с пользователем, но не хранится в БД
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority { //перечисление, связано с пользователем, но не хранится в БД
     USER;
+
+    @Override
+    public String getAuthority() {
+        return name();  //строковое представление значения USER;
+    }
 }

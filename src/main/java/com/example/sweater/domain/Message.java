@@ -1,9 +1,6 @@
 package com.example.sweater.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity //аннотация, которая говорит спрингу, что данный класс - сущность, которую необходимо сохранять в БД
 public class Message {
@@ -14,12 +11,29 @@ public class Message {
     private String text;
     private String tag;
 
+    @ManyToOne(fetch = FetchType.EAGER) //связь в БД. указываем, что одному пользователю соответствует множество сообщений
+    @JoinColumn(name = "user_id")       //колонка будет записана так, как в параметре, а не author_id
+    private User author;  //автор сообщения, связывать будем с записью таблицы пользователей
+
     public Message() {  //всегда для сущности нужно генерировать пустой конструктор, чтобы спринг не ругался
     }
 
-    public Message(String text, String tag) {   //а так же потребный конструктор
+    public Message(String text, String tag, User user) {   //а так же потребный конструктор
         this.text = text;
         this.tag = tag;
+        this.author = user; //добавили юзера в конструктор
+    }
+
+    public String getAuthorName(){
+        return author != null ? author.getUsername() : "<none>";
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public void setText(String text) {

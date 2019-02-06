@@ -1,8 +1,10 @@
 package com.example.sweater.Controller;
 
 import com.example.sweater.domain.Message;
+import com.example.sweater.domain.User;
 import com.example.sweater.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +31,9 @@ public class MainController {
     }
 
     @PostMapping("/main")    //мапируется пост-запрос, параметры - перечисленные в форме поля
-    public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
-        Message message = new Message(text, tag);   //создали новый объект с принятыми параметрами
+    //в четвертом уроке добавили юзера в конструктор Message, добавляем и в параметры метода формирования сообщения
+    public String add(@AuthenticationPrincipal User user, @RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
+        Message message = new Message(text, tag, user);   //создали новый объект с принятыми параметрами
         messageRepo.save(message);                  //сохранили в репозитории
 
         Iterable<Message> messages = messageRepo.findAll(); //опять ищем все сущности в репозитории, закладываем в итератор<сущность>
