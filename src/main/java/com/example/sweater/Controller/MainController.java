@@ -1,4 +1,4 @@
-package com.example.sweater;
+package com.example.sweater.Controller;
 
 import com.example.sweater.domain.Message;
 import com.example.sweater.repos.MessageRepo;
@@ -11,20 +11,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Map;
 
 @Controller
-public class GreetingController {
+public class MainController {
     @Autowired
     private MessageRepo messageRepo;    //репозиторий сообщений, применяется для возврата сущностей для списка (см.метод main)
 
-    @GetMapping("/greeting")
-    public String greeting(
-            @RequestParam(name="name", required=false, defaultValue="World") String name,
-            Map<String, Object> model
-    ) {
-        model.put("name", name);
+    @GetMapping("/")
+    public String greeting(Map<String, Object> model) {
         return "greeting";
     }
 
-    @GetMapping //если не указывается раздел, то маппируется корневой каталог сайта
+    @GetMapping ("/main") //если не указывается раздел, то маппируется корневой каталог сайта
     public String main(Map<String, Object> model) {
         Iterable<Message> messages = messageRepo.findAll(); //ищутся все сущности в репозитории сообщений, закладываются в коллекцию итератор<сущность>
 
@@ -32,7 +28,7 @@ public class GreetingController {
         return "main";                      //возвращаем вьюху
     }
 
-    @PostMapping    //мапируется пост-запрос, параметры - перечисленные в форме поля
+    @PostMapping("/main")    //мапируется пост-запрос, параметры - перечисленные в форме поля
     public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
         Message message = new Message(text, tag);   //создали новый объект с принятыми параметрами
         messageRepo.save(message);                  //сохранили в репозитории
